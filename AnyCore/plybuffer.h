@@ -96,7 +96,7 @@ private:
     int                     buf_cache_time_;
 	PlyStuts				ply_status_;
 	rtc::Thread				*worker_thread_;
-	uint32_t				sys_fast_video_time_;	// �뿪ʱ����
+	uint32_t				sys_fast_video_time_;	// 接收首包数据系统时间
 	uint32_t				rtmp_fast_video_time_;
 	uint32_t				rtmp_cache_time_;
 	uint32_t				play_cur_time_;

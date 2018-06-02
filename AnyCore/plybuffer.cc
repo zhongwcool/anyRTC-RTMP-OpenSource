@@ -26,6 +26,8 @@
 #define PLY_MAX_CACHE   16      // 16s
 
 #define PB_TICK	1011
+//invalid play buffer
+#define BUFFER_INVALID
 
 PlyBuffer::PlyBuffer(PlyBufferCallback&callback, rtc::Thread*worker)
 	: callback_(callback)
@@ -128,6 +130,35 @@ int	PlyBuffer::GetCacheTime()
 
 void PlyBuffer::DoDecode()
 {
+#ifdef BUFFER_INVALID
+    PlyPacket* pkt_video = NULL;
+    {//* Get audio
+        rtc::CritScope cs(&cs_list_audio_);
+        if (lst_audio_buffer_.size() > 0) {
+            if (ply_status_ == PS_Fast) {
+                ply_status_ = PS_Normal;
+                callback_.OnPlay();
+            }
+        }
+    }
+    {//* Get video
+        rtc::CritScope cs(&cs_list_video_);
+        if (lst_video_buffer_.size() > 0) {
+            pkt_video = lst_video_buffer_.front();
+            lst_video_buffer_.pop_front();
+            if (ply_status_ == PS_Fast) {
+                ply_status_ = PS_Normal;
+                callback_.OnPlay();
+            }
+        }
+    }
+
+    if (pkt_video) {
+        if (!callback_.OnNeedDecodeData(pkt_video)) {
+            delete pkt_video;
+        }
+    }
+#else
 	uint32_t curTime = rtc::Time();
 	if (sys_fast_video_time_ == 0)
 		return;
@@ -241,4 +272,5 @@ void PlyBuffer::DoDecode()
 			buf_cache_time_ = media_buf_time;
 		}
 	}
+#endif
 }
