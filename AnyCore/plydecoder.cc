@@ -211,6 +211,7 @@ PlyDecoder::PlyDecoder()
 		codecSetting.height = 480;
 		h264_decoder_->InitDecode(&codecSetting, 1);
 		h264_decoder_->RegisterDecodeCompleteCallback(this);
+#if 0
 		webrtc::VideoCodec setting;
 		setting.width = 640;
 		setting.height = 480;
@@ -219,6 +220,7 @@ PlyDecoder::PlyDecoder()
 		if (h264_decoder_->InitDecode(&setting, 1) != 0) {
 			//@AnyRTC - Error
 		}
+#endif
 	}
 
 	aac_frame_per10ms_size_ = (aac_sample_hz_ / 100) * sizeof(int16_t) * aac_channels_;
