@@ -20,15 +20,12 @@ package org.anyrtc.anyrtmp;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import org.anyrtc.core.AnyRTMP;
 import org.anyrtc.core.RTMPGuestHelper;
 import org.anyrtc.core.RTMPGuestKit;
-import org.webrtc.Logging;
-import org.webrtc.RendererCommon;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoRenderer;
 
@@ -50,18 +47,7 @@ public class GuestActivity extends Activity implements RTMPGuestHelper {
         {//* Init UI
             mTxtStatus = (TextView) findViewById(R.id.txt_rtmp_status);
             mSurfaceView = (SurfaceViewRenderer) findViewById(R.id.suface_view);
-            mSurfaceView.init(AnyRTMP.Inst().Egl().getEglBaseContext(), new RendererCommon.RendererEvents() {
-                @Override
-                public void onFirstFrameRendered() {
-
-                }
-
-                @Override
-                public void onFrameResolutionChanged(int videoWidth, int videoHeight, int rotation) {
-
-                }
-            });
-            mSurfaceView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+            mSurfaceView.init(AnyRTMP.Inst().Egl().getEglBaseContext(), null);
             mRenderer = new VideoRenderer(mSurfaceView);
         }
 
