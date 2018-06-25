@@ -27,7 +27,7 @@
 
 #define PB_TICK	1011
 //invalid play buffer
-#define BUFFER_INVALID
+#define BUFFER_INVALID 1
 
 PlyBuffer::PlyBuffer(PlyBufferCallback&callback, rtc::Thread*worker)
 	: callback_(callback)
@@ -130,7 +130,7 @@ int	PlyBuffer::GetCacheTime()
 
 void PlyBuffer::DoDecode()
 {
-#ifdef BUFFER_INVALID
+#if BUFFER_INVALID
     PlyPacket* pkt_video = NULL;
     {//* Get audio
         rtc::CritScope cs(&cs_list_audio_);

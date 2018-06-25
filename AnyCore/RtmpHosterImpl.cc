@@ -50,7 +50,7 @@ RtmpHosterImpl::RtmpHosterImpl(RTMPHosterEvent&callback)
 	if (av_rtmp_streamer_ == NULL)
 		av_rtmp_streamer_ = AnyRtmpstreamer::Create(*this);
 
-	SetVideoMode(RTMP_Video_SD);
+	SetVideoMode(RTMP_Video_720P);
 }
 
 
