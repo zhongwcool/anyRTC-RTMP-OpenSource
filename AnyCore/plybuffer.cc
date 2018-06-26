@@ -50,17 +50,24 @@ PlyBuffer::PlyBuffer(PlyBufferCallback&callback, rtc::Thread*worker)
 
 PlyBuffer::~PlyBuffer()
 {
-	std::list<PlyPacket*>::iterator iter = lst_audio_buffer_.begin();
-	while (iter != lst_audio_buffer_.end()) {
-		PlyPacket* pkt = *iter;
-		lst_audio_buffer_.erase(iter++);
-		delete pkt;
+	std::list<PlyPacket*>::iterator iter;
+	{
+		rtc::CritScope cs(&cs_list_audio_);
+		iter = lst_audio_buffer_.begin();
+		while (iter != lst_audio_buffer_.end()) {
+			PlyPacket* pkt = *iter;
+			lst_audio_buffer_.erase(iter++);
+			delete pkt;
+		}
 	}
-	iter = lst_video_buffer_.begin();
-	while (iter != lst_video_buffer_.end()) {
-		PlyPacket* pkt = *iter;
-		lst_video_buffer_.erase(iter++);
-		delete pkt;
+	{
+		rtc::CritScope cs(&cs_list_video_);
+		iter = lst_video_buffer_.begin();
+		while (iter != lst_video_buffer_.end()) {
+			PlyPacket* pkt = *iter;
+			lst_video_buffer_.erase(iter++);
+			delete pkt;
+		}
 	}
 }
 

@@ -54,7 +54,7 @@ private:
 	bool				av_rtmp_started_;
 	AnyRtmplayer			*av_rtmp_player_;
 
-	webrtc::VideoRenderer	*video_render_;
+	rtc::scoped_ptr<webrtc::VideoRenderer>	video_render_;
 };
 
 #endif	// __RTMP_GUSTER_IMPL_H__

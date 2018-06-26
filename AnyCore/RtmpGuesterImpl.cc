@@ -34,7 +34,6 @@ RtmpGuesterImpl::RtmpGuesterImpl(RTMPGuesterEvent&callback)
 	, worker_thread_(&webrtc::AnyRtmpCore::Inst())
 	, av_rtmp_started_(NULL)
 	, av_rtmp_player_(NULL)
-	, video_render_(NULL)
 {
 	av_rtmp_player_ = AnyRtmplayer::Create(*this);
 }
@@ -49,10 +48,7 @@ RtmpGuesterImpl::~RtmpGuesterImpl()
 		av_rtmp_player_ = NULL;
 	}
 
-	if (video_render_ != NULL) {
-		delete video_render_;
-		video_render_ = NULL;
-	}
+	video_render_.reset();
 }
 
 //* Rtmp function for pull rtmp stream 
@@ -61,8 +57,8 @@ void RtmpGuesterImpl::StartRtmpPlay(const char* url, void* render)
 	if (!av_rtmp_started_) {
 		rtmp_url_ = url;
 		av_rtmp_started_ = true;
-		video_render_ = webrtc::VideoRenderer::Create(render, 640, 480); // 此处设置宽高参数无效
-		av_rtmp_player_->SetVideoRender(video_render_);
+        video_render_.reset(webrtc::VideoRenderer::Create(render, 640, 480)); // 此处设置宽高参数无效
+        av_rtmp_player_->SetVideoRender(video_render_.get());
 		av_rtmp_player_->StartPlay(url);
 		webrtc::AnyRtmpCore::Inst().StartAudioTrack(this);
 	}
@@ -75,10 +71,6 @@ void RtmpGuesterImpl::StopRtmpPlay()
 		rtmp_url_ = "";
 		webrtc::AnyRtmpCore::Inst().StopAudioTrack();
 		av_rtmp_player_->StopPlay();
-		if (video_render_ != NULL) {
-			delete video_render_;
-			video_render_ = NULL;
-		}
 	}
 }
 
