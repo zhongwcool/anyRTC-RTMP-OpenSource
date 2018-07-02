@@ -393,9 +393,10 @@ bool PlyDecoder::OnNeedDecodeData(PlyPacket* pkt)
                     break;
             }
 
-            if(ft == FRAME_B) {
-                return false;
-            }
+            //FixMe 屏蔽掉此处代码，增加容错性
+            //if(ft == FRAME_B) {
+            //    return false;
+            //}
         }
 #endif
         int type = pdata[4] & 0x1f;
