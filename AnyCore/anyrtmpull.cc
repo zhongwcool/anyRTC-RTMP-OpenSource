@@ -42,7 +42,7 @@ AnyRtmpPull::AnyRtmpPull(AnyRtmpPullCallback&callback, const std::string&url)
 	rtmp_ = srs_rtmp_create(url.c_str());
 	srs_codec_ = new SrsAvcAacCodec();
 
-	audio_payload_ = new DemuxData(1024);
+	audio_payload_ = new DemuxData(1024 * 2); //增加缓存大小，防止收到大数据后溢出
 	video_payload_ = new DemuxData(384 * 1024);
 
 	running_ = true;
