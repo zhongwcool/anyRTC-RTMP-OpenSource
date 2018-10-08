@@ -46,8 +46,8 @@ public class GuestActivity extends Activity implements RTMPGuestHelper {
         setContentView(R.layout.activity_guest);
 
         {//* Init UI
-            mTxtStatus = (TextView) findViewById(R.id.txt_rtmp_status);
-            mSurfaceView = (SurfaceViewRenderer) findViewById(R.id.suface_view);
+            mTxtStatus = findViewById(R.id.txt_rtmp_status);
+            mSurfaceView = findViewById(R.id.suface_view);
             mSurfaceView.init(AnyRTMP.Inst().Egl().getEglBaseContext(), null);
             mSurfaceView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
             mRenderer = new VideoRenderer(mSurfaceView);
@@ -105,7 +105,7 @@ public class GuestActivity extends Activity implements RTMPGuestHelper {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mTxtStatus.setText(String.format(getString(R.string.str_rtmp_pull_status), cacheTime, curBitrate));
+                mTxtStatus.setText(String.format(getString(R.string.str_rtmp_pull_status), cacheTime, (float) curBitrate / 1024.0f));
             }
         });
     }
